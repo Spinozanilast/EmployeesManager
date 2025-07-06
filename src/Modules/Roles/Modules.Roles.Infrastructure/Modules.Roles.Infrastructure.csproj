@@ -1,17 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>RolesInfrastructure</RootNamespace>
+    <RootNamespace>Roles.Infrastructure</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EmployeesManager.Infrastructure.Shared\EmployeesManager.Infrastructure.Shared.csproj" />
+    <ProjectReference Include="..\Modules.Roles.Application\Modules.Roles.Application.csproj" />
     <ProjectReference Include="..\Modules.Roles.Domain\Modules.Roles.Domain.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Roles.Domain.Entities;
+using Roles.Infrastructure.Data;
 
-namespace RolesInfrastructure.Configurations;
+namespace Roles.Infrastructure.Configurations;
 
 internal class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
@@ -13,5 +14,7 @@ internal class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder
             .Property(e => e.Description).IsRequired().HasMaxLength(300);
+        
+        builder.ToTable("roles", RolesDbContext.SchemaName);
     }
 }

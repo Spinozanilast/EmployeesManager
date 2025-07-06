@@ -6,6 +6,8 @@ namespace Permissions.Infrastructure.Data;
 
 internal class PermissionsDbContext : DbContext
 {
+    public const string SchemaName = "permissions";
+
     public DbSet<Permission> Permissions { get; set; }
 
     public PermissionsDbContext(DbContextOptions<PermissionsDbContext> options) : base(options)
@@ -14,6 +16,8 @@ internal class PermissionsDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema(SchemaName);
+
         modelBuilder.ApplyConfiguration(new PermissionConfiguration());
     }
 }

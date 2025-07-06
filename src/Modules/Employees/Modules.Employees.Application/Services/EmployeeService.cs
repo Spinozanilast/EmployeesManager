@@ -2,13 +2,12 @@ using Employees.Application.Extensions;
 using Employees.Application.Models;
 using Employees.Domain.Entities;
 using Employees.Domain.Repositories;
-using Permissions.Application.Extensions;
 using Permissions.Application.Models.Shared;
 using Roles.Application.Models.Shared;
 
 namespace Employees.Application.Services;
 
-internal class EmployeeService : IEmployeeService
+public class EmployeeService : IEmployeeService
 {
     private readonly IEmployeesRepository _employeeRepository;
     private readonly IRoleAdapterService _roleAdapterService;

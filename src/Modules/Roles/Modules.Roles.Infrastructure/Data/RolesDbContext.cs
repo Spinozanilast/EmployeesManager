@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Roles.Domain.Entities;
-using RolesInfrastructure.Configurations;
+using Roles.Infrastructure.Configurations;
 
-namespace RolesInfrastructure.Data;
+namespace Roles.Infrastructure.Data;
 
 internal class RolesDbContext : DbContext
 {
+    public const string SchemaName = "roles";
+
     public DbSet<Role> Roles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
 
@@ -15,6 +17,8 @@ internal class RolesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema(SchemaName);
+        
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
     }

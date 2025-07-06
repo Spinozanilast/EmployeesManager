@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Permissions\Modules.Permissions.Application\Modules.Permissions.Application.csproj" />
     <ProjectReference Include="..\Modules.Roles.Domain\Modules.Roles.Domain.csproj" />
   </ItemGroup>

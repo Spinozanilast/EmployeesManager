@@ -1,4 +1,5 @@
 using Employees.Domain.Entities;
+using Employees.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -31,5 +32,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder
             .Property(e => e.MiddleName)
             .HasMaxLength(NamePartMaxLength);
+        
+        builder.ToTable("employees", EmployeesDbContext.SchemaName);
     }
 }

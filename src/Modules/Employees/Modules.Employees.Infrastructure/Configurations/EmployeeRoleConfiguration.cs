@@ -1,4 +1,5 @@
 using Employees.Domain.Entities;
+using Employees.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,5 +16,7 @@ public class EmployeeRoleConfiguration : IEntityTypeConfiguration<EmployeeRole>
             .HasOne(er => er.Employee)
             .WithMany(e => e.Roles)
             .HasForeignKey(er => er.EmployeeId);
+
+        builder.ToTable("employees_roles", EmployeesDbContext.SchemaName);
     }
 }

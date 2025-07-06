@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Roles.Domain.Entities;
 using Roles.Domain.Repositories;
 
-namespace RolesInfrastructure.Data;
+namespace Roles.Infrastructure.Data;
 
 internal class RolesRepository : IRolesRepository
 {

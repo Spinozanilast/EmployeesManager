@@ -4,11 +4,11 @@ using Permissions.Domain.Repositories;
 
 namespace Permissions.Infrastructure.Data;
 
-internal class PermissionRepository : IPermissionsRepository
+internal class PermissionsRepository : IPermissionsRepository
 {
     private readonly PermissionsDbContext _dbContext;
 
-    public PermissionRepository(PermissionsDbContext dbContext)
+    public PermissionsRepository(PermissionsDbContext dbContext)
     {
         _dbContext = dbContext;
     }

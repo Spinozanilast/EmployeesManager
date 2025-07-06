@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EmployeesManager.Infrastructure.Shared\EmployeesManager.Infrastructure.Shared.csproj" />
+    <ProjectReference Include="..\Modules.Employees.Application\Modules.Employees.Application.csproj" />
     <ProjectReference Include="..\Modules.Employees.Domain\Modules.Employees.Domain.csproj" />
   </ItemGroup>
 

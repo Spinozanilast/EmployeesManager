@@ -1,0 +1,21 @@
+﻿services:
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      # Only for development purposes, use .env file instead
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=employees_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - employees-manager-data:/var/lib/postgresql/data
+  employeesmanager.api:
+    image: employeesmanager.api
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+volumes:
+  employees-manager-data:

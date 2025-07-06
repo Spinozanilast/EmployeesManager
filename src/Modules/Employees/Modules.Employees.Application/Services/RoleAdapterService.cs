@@ -1,4 +1,3 @@
-using Permissions.Application.Models.Shared;
 using Roles.Application.Models.Shared;
 using Roles.Application.Services;
 
@@ -7,11 +6,11 @@ namespace Employees.Application.Services;
 /// <summary>
 /// Адаптер для сервиса ролей, который использует IRoleService из модуля Roles
 /// </summary>
-internal class RoleAdapterServiceAdapter : IRoleAdapterService
+public class RoleAdapterService : IRoleAdapterService
 {
     private readonly IRoleService _roleService;
 
-    public RoleAdapterServiceAdapter(IRoleService roleService)
+    public RoleAdapterService(IRoleService roleService)
     {
         _roleService = roleService;
     }

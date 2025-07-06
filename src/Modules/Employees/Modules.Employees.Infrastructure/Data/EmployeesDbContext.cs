@@ -6,6 +6,8 @@ namespace Employees.Infrastructure.Data;
 
 internal class EmployeesDbContext : DbContext
 {
+    public const string SchemaName = "employees";
+
     public DbSet<Employee> Employees { get; set; }
     public DbSet<EmployeeRole> EmployeeRoles { get; set; }
 
@@ -15,8 +17,10 @@ internal class EmployeesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema(SchemaName);
+
         modelBuilder.HasPostgresExtension("pg_trgm");
-        
+
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeRoleConfiguration());
     }

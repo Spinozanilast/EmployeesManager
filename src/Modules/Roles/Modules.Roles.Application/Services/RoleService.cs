@@ -8,10 +8,7 @@ using Roles.Domain.Repositories;
 
 namespace Roles.Application.Services;
 
-/// <summary>
-/// Сервис для работы с ролями
-/// </summary>
-internal class RoleService : IRoleService
+public class RoleService : IRoleService
 {
     private readonly IRolesRepository _roleRepository;
     private readonly IPermissionService _permissionService;
@@ -22,7 +19,6 @@ internal class RoleService : IRoleService
         _permissionService = permissionService;
     }
 
-    /// <inheritdoc/>
     public async Task<IEnumerable<RoleDto>> GetAllRolesAsync(CancellationToken cancellationToken = default)
     {
         var roles = await _roleRepository.GetAllAsync(cancellationToken);
@@ -39,7 +35,6 @@ internal class RoleService : IRoleService
         return result;
     }
 
-    /// <inheritdoc/>
     public async Task<RoleDto> GetRoleByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdAsync(id, cancellationToken);
@@ -55,7 +50,6 @@ internal class RoleService : IRoleService
         return roleDto;
     }
 
-    /// <inheritdoc/>
     public async Task<Guid> CreateRoleAsync(CreateRoleDto createRoleDto,
         CancellationToken cancellationToken = default)
     {
@@ -74,7 +68,6 @@ internal class RoleService : IRoleService
         return role.Id;
     }
 
-    /// <inheritdoc/>
     public async Task UpdateRoleAsync(Guid id, UpdateRoleDto updateRoleDto,
         CancellationToken cancellationToken = default)
     {
@@ -90,7 +83,6 @@ internal class RoleService : IRoleService
         await _roleRepository.UpdateAsync(role, cancellationToken);
     }
 
-    /// <inheritdoc/>
     public async Task DeleteRoleAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdAsync(id, cancellationToken);
@@ -103,7 +95,6 @@ internal class RoleService : IRoleService
         await _roleRepository.DeleteAsync(id, cancellationToken);
     }
 
-    /// <inheritdoc/>
     public async Task AssignPermissionsToRoleAsync(Guid roleId, IEnumerable<Guid> permissionIds,
         CancellationToken cancellationToken = default)
     {
@@ -123,7 +114,6 @@ internal class RoleService : IRoleService
         await _roleRepository.UpdateAsync(role, cancellationToken);
     }
 
-    /// <inheritdoc/>
     public async Task<IEnumerable<PermissionDto>> GetRolePermissionsAsync(Guid roleId,
         CancellationToken cancellationToken = default)
     {
