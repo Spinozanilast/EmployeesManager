@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Employees.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Roles\Modules.Roles.Application\Modules.Roles.Application.csproj" />
+    <ProjectReference Include="..\Modules.Employees.Domain\Modules.Employees.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

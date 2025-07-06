@@ -11,27 +11,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A627
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Employees", "Employees", "{035D73A7-7157-4164-961A-8190430FE000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Modules\Employees\Application\Application.csproj", "{954676E8-2A77-4DB3-A19B-FE777ECA4B76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Employees.Application", "src\Modules\Employees\Modules.Employees.Application\Modules.Employees.Application.csproj", "{954676E8-2A77-4DB3-A19B-FE777ECA4B76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Modules\Employees\Domain\Domain.csproj", "{40258221-F77A-4321-9CE3-E6CBFEEE9F0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Employees.Domain", "src\Modules\Employees\Modules.Employees.Domain\Modules.Employees.Domain.csproj", "{40258221-F77A-4321-9CE3-E6CBFEEE9F0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Modules\Employees\Infrastructure\Infrastructure.csproj", "{A291A4F0-A7B2-4DD4-846D-77677404E9A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Employees.Infrastructure", "src\Modules\Employees\Modules.Employees.Infrastructure\Modules.Employees.Infrastructure.csproj", "{A291A4F0-A7B2-4DD4-846D-77677404E9A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Permissions", "Permissions", "{940A6C60-CB71-4817-99E6-45DC35BB7714}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Modules\Permissions\Application\Application.csproj", "{5BFB2FB2-845A-4C32-AE53-AF2F89E5CA39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Permissions.Application", "src\Modules\Permissions\Modules.Permissions.Application\Modules.Permissions.Application.csproj", "{5BFB2FB2-845A-4C32-AE53-AF2F89E5CA39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Modules\Permissions\Domain\Domain.csproj", "{FF4EA1CF-DFAD-4D55-A8F0-FD04EFF44112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Permissions.Domain", "src\Modules\Permissions\Modules.Permissions.Domain\Modules.Permissions.Domain.csproj", "{FF4EA1CF-DFAD-4D55-A8F0-FD04EFF44112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Modules\Permissions\Infrastructure\Infrastructure.csproj", "{63C4313B-CB43-4D12-9DE7-4901CD03D4E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Permissions.Infrastructure", "src\Modules\Permissions\Modules.Permissions.Infrastructure\Modules.Permissions.Infrastructure.csproj", "{63C4313B-CB43-4D12-9DE7-4901CD03D4E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roles", "Roles", "{BECF3491-AC12-4700-AF07-A617D36AC644}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Modules\Roles\Application\Application.csproj", "{4E820727-AA10-4F44-87D1-ADE314DDE5B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Roles.Application", "src\Modules\Roles\Modules.Roles.Application\Modules.Roles.Application.csproj", "{4E820727-AA10-4F44-87D1-ADE314DDE5B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Modules\Roles\Domain\Domain.csproj", "{B5225229-F6D3-4980-BB8C-2C133747D120}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Roles.Domain", "src\Modules\Roles\Modules.Roles.Domain\Modules.Roles.Domain.csproj", "{B5225229-F6D3-4980-BB8C-2C133747D120}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Modules\Roles\Infrastructure\Infrastructure.csproj", "{0A788643-14D7-4DC1-9CE2-97CF1C5C82C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Roles.Infrastructure", "src\Modules\Roles\Modules.Roles.Infrastructure\Modules.Roles.Infrastructure.csproj", "{0A788643-14D7-4DC1-9CE2-97CF1C5C82C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

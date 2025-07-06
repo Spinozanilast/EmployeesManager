@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Roles.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Permissions\Modules.Permissions.Application\Modules.Permissions.Application.csproj" />
+    <ProjectReference Include="..\Modules.Roles.Domain\Modules.Roles.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
