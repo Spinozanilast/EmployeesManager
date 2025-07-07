@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Modules.Permissions.Domain\Modules.Permissions.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

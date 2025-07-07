@@ -12,7 +12,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
         builder.Property(p => p.SearchName)
-            .HasComputedColumnSql("\"FirstName\" || ' ' || \"MiddleName\" || ' ' || \"LastName\"", stored: true);
+            .HasComputedColumnSql("\"first_name\" || ' ' || \"middle_name\" || ' ' || \"last_name\"", stored: true);
 
         // Create trigram index
         builder.HasIndex(p => p.SearchName)

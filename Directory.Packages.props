@@ -1,24 +1,23 @@
 <Project>
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-        <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
-    </PropertyGroup>
-    <ItemGroup>
-        <!--  Web related packages  -->
-        <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.3.0"/>
-        <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0"/>
-        <PackageVersion Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0"/>
-        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6"/>
-        <PackageVersion Include="Microsoft.AspNetCore.Routing" Version="2.3.0"/>
-        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6"/>
-        <PackageVersion Include="Scalar.AspNetCore" Version="2.5.3"/>
-
-        <!--  Logging  -->
-        <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0"/>
-
-        <!-- EF Core related packages  -->
-        <PackageVersion Include="EFCore.NamingConventions" Version="9.0.0"/>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.6"/>
-        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4"/>
-    </ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <!--  Web related packages  -->
+    <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Routing" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.5.3" />
+    <!--  Logging  -->
+    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+    <!-- EF Core related packages  -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6" />
+    <PackageVersion Include="EFCore.NamingConventions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.6" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
 </Project>
