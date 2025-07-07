@@ -6,7 +6,8 @@ using Permissions.Domain.Repositories;
 
 namespace Permissions.Application.Services;
 
-public class PermissionService : IPermissionService
+public class 
+    PermissionService : IPermissionService
 {
     private readonly IPermissionsRepository _permissionRepository;
 

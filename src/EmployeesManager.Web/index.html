@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система управления ролями и правами сотрудников</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/@progress/kendo-theme-default@11.0.2/dist/default-main.css" />
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Скрипты -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2025.2.520/js/kendo.all.min.js"></script>
+    <script src="js/modules/EmployeeModule.js"></script>
+    <script src="js/modules/PermissionModule.js"></script>
+    <script src="js/modules/RoleModule.js"></script>
+    <script src="js/modules/AuthModule.js"></script>
+    <script src="js/Services/ApiService.js"></script>
+    <script src="js/env.js"></script>
+    <script src="js/env.dev.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">Управление сотрудниками</div>
+            <div class="user-info">
+                <span id="userName">Пользователь</span>
+                <button id="loginBtn" class="k-button">Войти как администратор</button>
+                <button id="logoutBtn" class="k-button" style="display: none;">Выйти</button>
+            </div>
+        </header>
+
+        <div class="app-content">
+            <div class="sidebar">
+                <ul class="nav-menu">
+                    <li class="nav-item active" data-page="employees">Сотрудники</li>
+                    <li class="nav-item admin-only" data-page="roles">Управление ролями</li>
+                    <li class="nav-item admin-only" data-page="permissions">Управление правами</li>
+                </ul>
+            </div>
+
+            <!-- Single container for dynamically loaded page content -->
+            <div class="main-content" id="mainContentArea">
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>&copy; 2025 - Система управления ролями и правами сотрудников</p>
+        </footer>
+    </div>
+
+    <script id="employees-template" type="text/x-kendo-template">
+        <div class="page-header">
+            <h2>Список сотрудников</h2>
+            <div class="page-actions admin-only">
+                <button id="addEmployeeBtn" class="k-button k-primary">Добавить сотрудника</button>
+            </div>
+        </div>
+        <div class="filter-panel">
+            <input id="employeeSearch" class="k-textbox" placeholder="Поиск по ФИО...">
+            <div id="roleFilter"></div>
+            <div id="permissionFilter"></div>
+        </div>
+        <div id="employeesGrid"></div>
+    </script>
+
+    <script id="roles-template" type="text/x-kendo-template">
+        <div class="page-header">
+            <h2>Управление ролями</h2>
+            <div class="page-actions">
+                <button id="addRoleBtn" class="k-button k-primary">Добавить роль</button>
+            </div>
+        </div>
+        <div id="rolesGrid"></div>
+    </script>
+
+    <script id="permissions-template" type="text/x-kendo-template">
+        <div class="page-header">
+            <h2>Управление правами</h2>
+            <div class="page-actions">
+                <button id="addPermissionBtn" class="k-button k-primary">Добавить право</button>
+            </div>
+        </div>
+        <div class="filter-panel">
+            <input id="permissionSearch" class="k-textbox" placeholder="Поиск по названию права...">
+            <div id="categoryFilter"></div>
+        </div>
+        <div id="permissionsGrid"></div>
+    </script>
+
+    <script id="employee-details-template" type="text/x-kendo-template">
+        <div class="page-header">
+            <h2>Информация о сотруднике</h2>
+            <div class="page-actions">
+                <button id="backToEmployeesBtn" class="k-button">Назад к списку</button>
+                <button id="editEmployeeBtn" class="k-button k-primary admin-only">Редактировать</button>
+            </div>
+        </div>
+        <div class="employee-info">
+            <div class="employee-header">
+                <h3 id="employeeFullName"></h3>
+            </div>
+            <div class="employee-details">
+                <div class="detail-section">
+                    <h4>Основная информация</h4>
+                    <div class="detail-row">
+                        <span class="detail-label">Имя:</span>
+                        <span id="employeeFirstName" class="detail-value"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Фамилия:</span>
+                        <span id="employeeLastName" class="detail-value"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Отчество:</span>
+                        <span id="employeeMiddleName" class="detail-value"></span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Роли</h4>
+                    <div id="employeeRolesSection">
+                        <div id="employeeRolesList"></div>
+                        <div class="admin-only">
+                            <button id="assignRolesBtn" class="k-button">Назначить роли</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Права</h4>
+                    <div id="employeePermissionsList"></div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="role-edit-template" type="text/x-kendo-template">
+        <div class="page-header">
+            <h2 id="roleEditTitle">Редактирование роли</h2>
+            <div class="page-actions">
+                <button id="backToRolesBtn" class="k-button">Назад к списку</button>
+                <button id="saveRoleBtn" class="k-button k-primary">Сохранить</button>
+            </div>
+        </div>
+        <div class="role-edit-form">
+            <div class="form-group">
+                <label for="roleName">Название роли</label>
+                <input id="roleName" class="k-textbox" required>
+            </div>
+            <div class="form-group">
+                <label for="roleDescription">Описание</label>
+                <textarea id="roleDescription" class="k-textarea"></textarea>
+            </div>
+            <div class="form-group">
+                <h4>Права</h4>
+                <div class="permissions-filter">
+                    <input id="permissionSearchInRole" class="k-textbox" placeholder="Поиск по названию права...">
+                    <div id="categoryFilterInRole"></div>
+                </div>
+                <div id="permissionsListInRole"></div>
+            </div>
+        </div>
+    </script>
+
+    <div id="employeeDialog"></div>
+    <div id="roleDialog"></div>
+    <div id="permissionDialog"></div>
+    <div id="assignRolesDialog"></div>
+
+    <script id="employee-dialog-template" type="text/x-kendo-template">
+        <div class="form-group">
+            <label for="firstName">Имя</label>
+            <input id="firstName" class="k-textbox" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Фамилия</label>
+            <input id="lastName" class="k-textbox" required>
+        </div>
+        <div class="form-group">
+            <label for="middleName">Отчество</label>
+            <input id="middleName" class="k-textbox">
+        </div>
+        <div class="form-group">
+            <label for="employeeRoles">Роли</label>
+            <div id="employeeRolesListBox"></div>
+        </div>
+    </script>
+
+    <script id="role-dialog-template" type="text/x-kendo-template">
+        <div class="form-group">
+            <label for="dialogRoleName">Название роли</label>
+            <input id="dialogRoleName" class="k-textbox" required>
+        </div>
+        <div class="form-group">
+            <label for="dialogRoleDescription">Описание</label>
+            <textarea id="dialogRoleDescription" class="k-textarea"></textarea>
+        </div>
+        <div class="form-group">
+            <h4>Права</h4>
+            <div class="permissions-filter">
+                <input id="dialogPermissionSearch" class="k-textbox" placeholder="Поиск по названию права...">
+                <div id="dialogCategoryFilter"></div>
+            </div>
+            <div id="dialogPermissionsList" class="permissions-list"></div>
+        </div>
+    </script>
+
+    <script id="permission-dialog-template" type="text/x-kendo-template">
+        <div class="form-group">
+            <label for="permissionName">Название права</label>
+            <input id="permissionName" class="k-textbox" required>
+        </div>
+        <div class="form-group">
+            <label for="permissionDescription">Описание</label>
+            <textarea id="permissionDescription" class="k-textarea"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="permissionCategory">Категория</label>
+            <input id="permissionCategory" class="k-textbox" required>
+        </div>
+    </script>
+
+    <script id="assign-roles-dialog-template" type="text/x-kendo-template">
+        <div id="assignRolesListBox"></div>
+    </script>
+</body>
+
+</html>

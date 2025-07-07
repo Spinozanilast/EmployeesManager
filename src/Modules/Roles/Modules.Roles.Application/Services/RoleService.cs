@@ -11,12 +11,12 @@ namespace Roles.Application.Services;
 public class RoleService : IRoleService
 {
     private readonly IRolesRepository _roleRepository;
-    private readonly IPermissionService _permissionService;
+    private readonly IPermissionAdapterService _permissionAdapter;
 
-    public RoleService(IRolesRepository roleRepository, IPermissionService permissionService)
+    public RoleService(IRolesRepository roleRepository, IPermissionAdapterService permissionAdapter)
     {
         _roleRepository = roleRepository;
-        _permissionService = permissionService;
+        _permissionAdapter = permissionAdapter;
     }
 
     public async Task<IEnumerable<RoleDto>> GetAllRolesAsync(CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ public class RoleService : IRoleService
 
     public async Task<RoleDto> GetRoleByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var role = await _roleRepository.GetByIdAsync(id, cancellationToken);
+        var role = await _roleRepository.GetByIdTrackedAsync(id, cancellationToken);
         if (role is null)
         {
             throw new KeyNotFoundException($"Роль с идентификатором {id} не найдена");
@@ -71,7 +71,7 @@ public class RoleService : IRoleService
     public async Task UpdateRoleAsync(Guid id, UpdateRoleDto updateRoleDto,
         CancellationToken cancellationToken = default)
     {
-        var role = await _roleRepository.GetByIdAsync(id, cancellationToken);
+        var role = await _roleRepository.GetByIdTrackedAsync(id, cancellationToken);
 
         if (role is null)
         {
@@ -85,7 +85,7 @@ public class RoleService : IRoleService
 
     public async Task DeleteRoleAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var role = await _roleRepository.GetByIdAsync(id, cancellationToken);
+        var role = await _roleRepository.GetByIdTrackedAsync(id, cancellationToken);
 
         if (role is null)
         {
@@ -117,14 +117,14 @@ public class RoleService : IRoleService
     public async Task<IEnumerable<PermissionDto>> GetRolePermissionsAsync(Guid roleId,
         CancellationToken cancellationToken = default)
     {
-        var role = await _roleRepository.GetByIdAsync(roleId, cancellationToken);
+        var role = await _roleRepository.GetByIdTrackedAsync(roleId, cancellationToken);
         if (role is null)
         {
             throw new KeyNotFoundException($"Роль с идентификатором {roleId} не найдена");
         }
 
         var permissionIds = role.Permissions.Select(p => p.PermissionId).ToList();
-        var permissions = await _permissionService.GetPermissionsByIdsAsync(permissionIds, cancellationToken);
+        var permissions = await _permissionAdapter.GetPermissionsByIdsAsync(permissionIds, cancellationToken);
 
         return permissions;
     }

@@ -17,13 +17,22 @@ internal class RolesRepository : IRolesRepository
     {
         return await _dbContext.Roles
             .AsNoTracking()
+            .Include(x => x.Permissions)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<Role?> GetByIdTrackedAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Roles
+            .AsNoTracking()
+            .Include(x => x.Permissions)
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
     public async Task<Role?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Roles
-            .AsNoTracking()
+            .Include(x => x.Permissions)
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
