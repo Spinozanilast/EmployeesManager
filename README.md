@@ -6,13 +6,21 @@
 
 ### Через Docker
 
-Запускаем Docker (или другой like docker-compose клиент) и находясь в корне проекта исполняем следующую комманду
+0. Вставить лицензионный ключ Kendo Ui в [env.dev.js] (https://github.com/Spinozanilast/EmployeesManager/tree/web-app/src/EmployeesManager.Web/js/env.dev.js)
+
+KendoLicensing.setScriptKey("xxxxx")
+
+1. Запускаем Docker (или другой like docker-compose клиент) и находясь в корне проекта исполняем следующую команду в терминале:
 
 ```bash 
 docker compose up 
 ```
 
 ### С уже запущенным сервером PostgreSQL
+
+0. Вставить лицензионный ключ Kendo Ui в [env.dev.js] веб-проекта (https://github.com/Spinozanilast/EmployeesManager/tree/web-app/src/EmployeesManager.Web/js/env.dev.js)
+
+KendoLicensing.setScriptKey("xxxxx")
 
 1. Если сервер базы данных использует порт 5432, то ничего менять не нужно, если другой - то поменять конфигурацию в
    docker-compose.yml или в конфигурации проекта
