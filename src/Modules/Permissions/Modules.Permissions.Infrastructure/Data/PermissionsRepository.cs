@@ -53,6 +53,7 @@ internal class PermissionsRepository : IPermissionsRepository
     public async Task UpdateAsync(Permission permission, CancellationToken cancellationToken = default)
     {
         await _dbContext.Permissions
+            .Where(p => p.Id == permission.Id)
             .ExecuteUpdateAsync(setters =>
                 setters
                     .SetProperty(p => p.Name, permission.Name)

@@ -36,7 +36,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<EmployeeDto> GetEmployeeByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var employee = await _employeeRepository.GetByIdAsync(id, cancellationToken);
+        var employee = await _employeeRepository.GetByIdTrackedAsync(id, cancellationToken);
 
         if (employee is null)
         {
@@ -108,7 +108,7 @@ public class EmployeeService : IEmployeeService
     public async Task UpdateEmployeeAsync(Guid id, UpdateEmployeeDto dto,
         CancellationToken cancellationToken = default)
     {
-        var employee = await _employeeRepository.GetByIdAsync(id, cancellationToken);
+        var employee = await _employeeRepository.GetByIdTrackedAsync(id, cancellationToken);
         if (employee is null)
         {
             throw new KeyNotFoundException($"Сотрудник с идентификатором {id} не найден");
@@ -124,7 +124,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task DeleteEmployeeAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var employee = await _employeeRepository.GetByIdAsync(id, cancellationToken);
+        var employee = await _employeeRepository.GetByIdTrackedAsync(id, cancellationToken);
         if (employee is null)
         {
             throw new KeyNotFoundException($"Сотрудник с идентификатором {id} не найден");
@@ -156,7 +156,7 @@ public class EmployeeService : IEmployeeService
     public async Task<IEnumerable<RoleDto>> GetEmployeeRolesAsync(Guid employeeId,
         CancellationToken cancellationToken = default)
     {
-        var employee = await _employeeRepository.GetByIdAsync(employeeId, cancellationToken);
+        var employee = await _employeeRepository.GetByIdTrackedAsync(employeeId, cancellationToken);
         if (employee is null)
         {
             throw new KeyNotFoundException($"Сотрудник с идентификатором {employeeId} не найден");

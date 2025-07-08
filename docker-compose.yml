@@ -26,6 +26,12 @@
       - ConnectionStrings__PostgresConnection=Server=postgres-db:5432;User Id=postgres;Password=password;Database=employees_manager
     depends_on:
       - postgres-db
+  web-client:
+    image: nginx:alpine
+    volumes:
+      - ./src/EmployeesManager.Web:/usr/share/nginx/html
+    ports:
+      - "5001:80"
 
 volumes:
   employees-manager-data:

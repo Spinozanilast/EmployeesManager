@@ -16,6 +16,8 @@ class EmployeeModule {
     }
 
     initEmployeesPage() {
+        this.initEmployeeFilters();
+
         $('#employeesGrid').kendoGrid({
             dataSource: {
                 transport: {
@@ -128,7 +130,67 @@ class EmployeeModule {
             }
         });
 
-        $('#roleFilter').kendoDropDownList({
+        $('#permissionFilter').kendoMultiSelect({
+            dataSource: {
+                transport: {
+                    read: (options) => {
+                        this.#apiService.getPermissions()
+                            .done(result => {
+                                const permissions = result.map(p => ({
+                                    id: p.id,
+                                    name: `${p.category} - ${p.name}`
+                                }));
+                                options.success(permissions);
+                            })
+                            .fail(xhr => {
+                                options.error(xhr);
+                                App.handleAjaxError(xhr);
+                            });
+                    }
+                },
+                schema: {
+                    model: {
+                        id: 'id',
+                        fields: {
+                            id: { type: 'string' },
+                            name: { type: 'string' }
+                        }
+                    }
+                }
+            },
+            dataTextField: 'name',
+            dataValueField: 'id',
+            placeholder: 'Выберите права...',
+            change: (e) => {
+                const selectedPermissions = e.sender.value();
+                const grid = $('#employeesGrid').data('kendoGrid');
+                if (grid) {
+                    if (selectedPermissions && selectedPermissions.length > 0) {
+                        grid.dataSource.filter({
+                            logic: 'and',
+                            filters: [
+                                {
+                                    field: 'roles',
+                                    operator: (roles, filterValue) => {
+                                        if (!roles || !roles.length) return false;
+                                        return roles.some(role =>
+                                            role.permissions && filterValue.every(permId =>
+                                                role.permissions.some(p => p.id === permId)
+                                            )
+                                        );
+                                    },
+                                    value: selectedPermissions
+                                }
+                            ]
+                        });
+                    } else {
+                        grid.dataSource.filter({});
+                    }
+                }
+            }
+        });
+
+        $('#roleFilter').kendoMultiSelect({
             dataSource: {
                 transport: {
                     read: (options) => {
@@ -152,12 +214,12 @@ class EmployeeModule {
             },
             dataTextField: 'name',
             dataValueField: 'id',
-            optionLabel: 'Выберите роль...',
+            placeholder: 'Выберите роли...',
             change: (e) => {
-                const roleId = e.sender.value();
+                const selectedRoles = e.sender.value();
                 const grid = $('#employeesGrid').data('kendoGrid');
                 if (grid) {
-                    if (roleId) {
+                    if (selectedRoles && selectedRoles.length > 0) {
                         grid.dataSource.filter({
                             logic: 'and',
                             filters: [
@@ -165,9 +227,9 @@ class EmployeeModule {
                                     field: 'roles',
                                     operator: (roles, filterValue) => {
                                         if (!roles || !roles.length) return false;
-                                        return roles.some(role => role.id === filterValue);
+                                        return roles.some(role => filterValue.includes(role.id));
                                     },
-                                    value: roleId
+                                    value: selectedRoles
                                 }
                             ]
                         });
@@ -204,6 +266,9 @@ class EmployeeModule {
                     : '<div class="text-muted">Нет назначенных ролей</div>';
                 $('#employeeRolesList').html(rolesHtml);
 
+                $('#editEmployeeBtn').off('click').on('click', () => this.showEmployeeDialog(employee));
+                $('#assignRolesBtn').off('click').on('click', () => this.showAssignRolesDialog(employee));
+
                 this.#apiService.getEmployeePermissions(employeeId)
                     .done(permissions => {
                         const permissionsByCategory = {};
@@ -218,16 +283,17 @@ class EmployeeModule {
                         if (Object.keys(permissionsByCategory).length === 0) {
                             permissionsHtml = '<div class="text-muted">Нет прав</div>';
                         } else {
+                            permissionsHtml += '<div class="permissions-container horizontal-scroll">';
                             for (const category in permissionsByCategory) {
-                                permissionsHtml += `<div class="permission-category">${kendo.htmlEncode(category)}</div>`;
+                                permissionsHtml += `<div class="permission-category">${kendo.htmlEncode(category)}`;
                                 permissionsHtml += '<div class="permission-list">';
                                 permissionsByCategory[category].forEach(permission => {
                                     permissionsHtml += `<div class="permission-tag" title="${kendo.htmlEncode(permission.description || '')}">${kendo.htmlEncode(permission.name)}</div>`;
                                 });
-                                permissionsHtml += '</div>';
+                                permissionsHtml += '</div></div>';
                             }
                         }
-                        $('#employeePermissionsList').html(permissionsHtml);
+                        $('#employeePermissionsList').html(permissionsHtml + '</div>');
                     })
                     .fail(App.handleAjaxError);
             })
@@ -258,47 +324,34 @@ class EmployeeModule {
                     $('#lastName').val(employee.lastName);
                     $('#middleName').val(employee.middleName);
                 }
-
                 this.#apiService.getRoles()
-                    .done(roles => {
-                        $('#employeeRolesListBox').kendoListBox({
-                            dataSource: roles,
-                            dataTextField: 'name',
-                            dataValueField: 'id',
-                            selectable: 'multiple',
-                            draggable: false,
-                            dropSources: [],
-                            toolbar: {
-                                tools: [
-                                    'moveUp',
-                                    'moveDown',
-                                    'transferTo',
-                                    'transferFrom',
-                                    'transferAllTo',
-                                    'transferAllFrom'
-                                ]
-                            }
-                        });
-
+                    .done((roles) => {
+                        let assignedRoleIds = [];
                         if (isEdit) {
                             this.#apiService.getEmployeeRoles(employee.id)
                                 .done(employeeRoles => {
-                                    const listBox = $('#employeeRolesListBox').data('kendoListBox');
-                                    const items = listBox.items();
-                                    items.each(function (index, item) {
-                                        const roleId = listBox.dataItem(item).id;
-                                        if (employeeRoles.some(role => role.id === roleId)) {
-                                            listBox.select(item);
-                                        }
+                                    assignedRoleIds = employeeRoles.map(r => r.id);
+                                    $('#employeeRolesMultiSelect').kendoMultiSelect({
+                                        dataSource: roles,
+                                        dataTextField: 'name',
+                                        dataValueField: 'id',
+                                        value: assignedRoleIds,
+                                        placeholder: 'Выберите роли...'
                                     });
                                 })
                                 .fail(App.handleAjaxError);
+                        } else {
+                            $('#employeeRolesMultiSelect').kendoMultiSelect({
+                                dataSource: roles,
+                                dataTextField: 'name',
+                                dataValueField: 'id',
+                                placeholder: 'Выберите роли...'
+                            });
                         }
                     })
                     .fail(App.handleAjaxError);
             }
         }).data('kendoDialog');
-
         dialog.open();
     }
 
@@ -307,33 +360,19 @@ class EmployeeModule {
             App.showNotification('У вас нет прав для сохранения сотрудника.', 'warning');
             return false;
         }
-
         const firstName = $('#firstName').val();
         const lastName = $('#lastName').val();
         const middleName = $('#middleName').val();
-
         if (!firstName || !lastName) {
             App.showNotification('Имя и фамилия обязательны для заполнения', 'error');
             return false;
         }
-
         const employeeData = {
             firstName: firstName,
             lastName: lastName,
             middleName: middleName
         };
-
-        const listBox = $('#employeeRolesListBox').data('kendoListBox');
-        const selectedRoleIds = [];
-
-        if (listBox) {
-            const selectedItems = listBox.select();
-            selectedItems.each(function (index, item) {
-                const roleId = listBox.dataItem(item).id;
-                selectedRoleIds.push(roleId);
-            });
-        }
-
+        const selectedRoleIds = $('#employeeRolesMultiSelect').data('kendoMultiSelect') ? $('#employeeRolesMultiSelect').data('kendoMultiSelect').value() : [];
         if (isEdit) {
             this.#apiService.updateEmployee(employeeId, employeeData)
                 .done(() => {
@@ -347,9 +386,9 @@ class EmployeeModule {
                 .fail(App.handleAjaxError);
         } else {
             this.#apiService.createEmployee(employeeData)
-                .done((result) => {
+                .done((employeeId) => {
                     if (selectedRoleIds.length > 0) {
-                        this.#apiService.assignRolesToEmployee(result.id, selectedRoleIds)
+                        this.#apiService.assignRolesToEmployee(employeeId, selectedRoleIds)
                             .done(() => {
                                 $('#employeesGrid').data('kendoGrid').dataSource.read();
                                 App.showNotification('Сотрудник успешно создан', 'success');
@@ -362,7 +401,71 @@ class EmployeeModule {
                 })
                 .fail(App.handleAjaxError);
         }
-
         return true;
+    }
+
+    showAssignRolesDialog(employee) {
+        if (!this.#auth.isAdmin()) {
+            App.showNotification('У вас нет прав для выполнения этой операции.', 'warning');
+            return;
+        }
+        const dialog = $('#assignRolesDialog').kendoDialog({
+            width: '500px',
+            title: 'Назначение ролей',
+            closable: true,
+            modal: true,
+            content: $('#assign-roles-dialog-template').html(),
+            actions: [
+                { text: 'Отмена' },
+                { text: 'Сохранить', primary: true, action: () => this.saveAssignedRoles(employee.id) }
+            ],
+            open: () => {
+                this.#apiService.getRoles()
+                    .done(roles => {
+                        this.#apiService.getEmployeeRoles(employee.id)
+                            .done(employeeRoles => {
+                                const assignedRoleIds = employeeRoles.map(r => r.id);
+                                $('#assignRolesMultiSelect').kendoMultiSelect({
+                                    dataSource: roles,
+                                    dataTextField: 'name',
+                                    dataValueField: 'id',
+                                    value: assignedRoleIds,
+                                    placeholder: 'Выберите роли...'
+                                });
+                            })
+                            .fail(App.handleAjaxError);
+                    })
+                    .fail(App.handleAjaxError);
+            }
+        }).data('kendoDialog');
+        dialog.open();
+    }
+
+    saveAssignedRoles(employeeId) {
+        const selectedRoleIds = $('#assignRolesMultiSelect').data('kendoMultiSelect') ? $('#assignRolesMultiSelect').data('kendoMultiSelect').value() : [];
+        this.#apiService.assignRolesToEmployee(employeeId, selectedRoleIds)
+            .done(() => {
+                $('#employeeRolesList').html('');
+                $('#employeesGrid').data('kendoGrid').dataSource.read();
+                App.showNotification('Роли успешно обновлены', 'success');
+            })
+            .fail(App.handleAjaxError);
+        return true;
+    }
+
+    deleteEmployee(employeeId) {
+        if (!this.#auth.isAdmin()) {
+            App.showNotification('У вас нет прав для удаления права сотрудника.', 'warning');
+            return;
+        }
+
+        if (confirm('Вы уверены, что хотите удалить этого сотрудника?')) {
+            this.#apiService.deleteEmployee(employeeId)
+                .done(() => {
+                    $('#employeesGrid').data('kendoGrid').dataSource.read();
+                    App.showNotification('Пользователь успешно удален', 'success');
+                })
+                .fail(App.handleAjaxError);
+        }
     }
 }

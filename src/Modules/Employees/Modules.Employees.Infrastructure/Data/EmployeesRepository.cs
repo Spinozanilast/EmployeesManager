@@ -21,10 +21,17 @@ internal class EmployeesRepository : IEmployeesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Employee?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Employee?> GetByIdTrackedAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Employees
             .AsNoTracking()
+            .Include(e => e.Roles)
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+    }
+
+    public async Task<Employee?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Employees
             .Include(e => e.Roles)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }

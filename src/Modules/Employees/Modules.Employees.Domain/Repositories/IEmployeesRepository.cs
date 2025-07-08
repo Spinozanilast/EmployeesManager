@@ -5,6 +5,7 @@ namespace Employees.Domain.Repositories;
 public interface IEmployeesRepository
 {
     Task<IEnumerable<Employee>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<Employee?> GetByIdTrackedAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Employee?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<IEnumerable<Employee>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default);
     Task<IEnumerable<Employee>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default);

@@ -51,7 +51,35 @@ class RoleModule {
             columns: [
                 { field: 'name', title: 'Название', width: '20%' },
                 { field: 'description', title: 'Описание', width: '20%' },
-                { field: 'permissions', title: 'Права', width: '30%' },
+                {
+                    field: 'permissions',
+                    title: 'Права',
+                    width: '30%',
+                    template: (dataItem) => {
+                        if (!dataItem.permissions || dataItem.permissions.length === 0) {
+                            return '<div class="text-muted">Нет прав</div>';
+                        }
+
+                        const permissionsByCategory = {};
+                        dataItem.permissions.forEach(permission => {
+                            if (!permissionsByCategory[permission.category]) {
+                                permissionsByCategory[permission.category] = [];
+                            }
+                            permissionsByCategory[permission.category].push(permission);
+                        });
+
+                        let html = '<div class="permissions-container">';
+                        for (const category in permissionsByCategory) {
+                            html += `<div class="permission-category">${kendo.htmlEncode(category)}`;
+                            html += '<div class="permission-list">';
+                            permissionsByCategory[category].forEach(permission => {
+                                html += `<div class="permission-tag" title="${kendo.htmlEncode(permission.description || '')}">${kendo.htmlEncode(permission.name)}</div>`;
+                            });
+                            html += '</div></div>';
+                        }
+                        return html + '</div>';
+                    }
+                },
                 {
                     command: [
                         {

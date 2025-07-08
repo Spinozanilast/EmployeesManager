@@ -2,7 +2,6 @@ class App {
     currentPage = 'employees';
 
     #mainContentContainer = null;
-    #auth = new AuthModule();
 
     #dataCache = {
         employees: [],
@@ -10,14 +9,17 @@ class App {
         permissions: []
     };
 
+    #auth;
     #employeeModule;
     #roleModule;
     #permissionModule;
 
     constructor() {
         const apiService = new ApiService(API_URL);
+        const navigateTo = this.navigateTo.bind(this);
 
-        this.#employeeModule = new EmployeeModule(apiService, this.#auth, this.#dataCache, this.navigateTo.bind(this));
+        this.#auth = new AuthModule(navigateTo);
+        this.#employeeModule = new EmployeeModule(apiService, this.#auth, this.#dataCache, navigateTo);
         this.#roleModule = new RoleModule(apiService, this.#auth, this.#dataCache);
         this.#permissionModule = new PermissionModule(apiService, this.#auth, this.#dataCache);
 
@@ -78,7 +80,7 @@ class App {
             .fail(this.handleAjaxError);
     }
 
-    navigateTo(page) {
+    navigateTo(page = 'employees') {
         this.#mainContentContainer.empty();
         $('.nav-item').removeClass('active');
 
@@ -149,9 +151,9 @@ class App {
 
         if (!isAdmin) {
             const currentNavDataPage = $('.nav-menu .nav-item.active').data('page');
-            if (currentNavDataPage !== 'employees' && currentNavDataPage !== 'employee-details') {
-                this.navigateTo('employees');
-            }
+            // if (currentNavDataPage !== 'employees' && currentNavDataPage !== 'employee-details') {
+            //     this.navigateTo('employees');
+            // }
         }
     }
 

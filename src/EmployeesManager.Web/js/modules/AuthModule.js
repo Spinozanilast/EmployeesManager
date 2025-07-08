@@ -1,14 +1,17 @@
 class AuthModule {
-
     #isAdmin = false;
     #currentUser = {
         name: 'Пользователь',
         isAdmin: false
     };
 
+    #navigationCallback;
+
+    constructor(navigationCallback) {
+        this.#navigationCallback = navigationCallback;
+    }
 
     init() {
-
         const savedAdmin = localStorage.getItem('isAdmin');
         if (savedAdmin === 'true') {
             this.setAdminMode(true);
@@ -38,6 +41,7 @@ class AuthModule {
         if (admin) {
             App.showNotification('Вы вошли как администратор', 'info');
         } else {
+            this.#navigationCallback();
             App.showNotification('Вы вошли как пользователь', 'info');
         }
     }

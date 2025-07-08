@@ -255,7 +255,7 @@ class PermissionModule {
             return;
         }
 
-        if (confirm('Вы уверены, что хотите удалить это Право?')) {
+        if (confirm('Вы уверены, что хотите удалить это право?')) {
             this.#apiService.deletePermission(permissionId)
                 .done(() => {
                     $('#permissionsGrid').data('kendoGrid').dataSource.read();

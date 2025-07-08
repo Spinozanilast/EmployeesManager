@@ -61,7 +61,7 @@ class ApiService {
     assignRolesToEmployee(id, roleIds) {
         return $.ajax({
             url: `${this.#apiBaseUrl}/employees/${id}/roles`,
-            method: 'PUT',
+            method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(roleIds)
         });
